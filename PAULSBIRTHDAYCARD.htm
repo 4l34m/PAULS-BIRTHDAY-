@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PTYPAOLO'S BDAY GFT</title>
+    <!-- Load Tailwind CSS for responsive utility classes and modern layout --><script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        /* Hyper Saturated Color Strobo Effect Keyframes */
+        @keyframes hyperStrobe {
+            0%, 100% { background-color: #FF0000; } /* Red */
+            5% { background-color: #FF4500; } /* Orange-Red */
+            10% { background-color: #FFA500; } /* Orange */
+            15% { background-color: #FFFF00; } /* Yellow */
+            20% { background-color: #ADFF2F; } /* Green-Yellow */
+            25% { background-color: #00FF00; } /* Lime Green */
+            30% { background-color: #00FF7F; } /* Spring Green */
+            35% { background-color: #00FFFF; } /* Cyan */
+            40% { background-color: #1E90FF; } /* Dodger Blue */
+            45% { background-color: #0000FF; } /* Blue */
+            50% { background-color: #8A2BE2; } /* Blue-Violet */
+            55% { background-color: #9400D3; } /* Dark Violet */
+            60% { background-color: #FF00FF; } /* Magenta */
+            65% { background-color: #FF1493; } /* Deep Pink */
+            70% { background-color: #FF69B4; } /* Hot Pink */
+            75% { background-color: #FFD700; } /* Gold */
+            80% { background-color: #40E0D0; } /* Turquoise */
+            85% { background-color: #800080; } /* Purple */
+            90% { background-color: #FF6347; } /* Tomato */
+            95% { background-color: #7CFC00; } /* Lawn Green */
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Apply hyper strobe animation faster (1s cycle time) */
+            animation: hyperStrobe 1s infinite linear; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+        }
+        .tile {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            /* Simple design: Black stroke, White background */
+            border: 2px solid #000000;
+            background-color: #ffffff;
+            transition: all 0.3s ease;
+            user-select: none;
+            cursor: default;
+        }
+        /* Adjust font size for 12-letter words on smaller screens */
+        @media (max-width: 640px) {
+             .tile {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Color Feedback Styles */
+        /* Empty/Input State */
+        .tile.default {
+            background-color: #eee;
+            border-color: #6b7280;
+            color: #1f2937;
+        }
+        /* Correct (Green) */
+        .tile.correct {
+            background-color: #10b981;
+            border-color: #10b981;
+            color: white;
+            animation: flip 0.6s linear forwards;
+        }
+        /* Present (Yellow/Amber) */
+        .tile.present {
+            background-color: #f59e0b;
+            border-color: #f59e0b;
+            color: white;
+            animation: flip 0.6s linear forwards;
+        }
+        /* Absent (Gray) */
+        .tile.absent {
+            background-color: #6b7280;
+            border-color: #6b7280;
+            color: white;
+            animation: flip 0.6s linear forwards;
+        }
+
+        /* Keyboard styles */
+        .key {
+            padding: 0.5rem 0.75rem;
+            margin: 0.25rem;
+            border-radius: 0.5rem;
+            background-color: #d1d5db;
+            cursor: pointer;
+            font-weight: 700;
+            user-select: none;
+            transition: background-color 0.1s;
+        }
+        .key:hover {
+            background-color: #e5e7eb;
+        }
+        .key[data-state="correct"] { background-color: #10b981; color: white; }
+        .key[data-state="present"] { background-color: #f59e0b; color: white; }
+        .key[data-state="absent"] { background-color: #6b7280; color: white; }
+
+        /* Animation Keyframes */
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        @keyframes flip {
+            0% { transform: rotateX(0); }
+            50% { transform: rotateX(90deg); }
+            100% { transform: rotateX(0); }
+        }
+
+        /* Styles for the new word segment indicators */
+        .word-segment-indicator {
+            position: absolute;
+            top: -8px; /* 8 pixels above the grid */
+            left: 0;
+            width: 100%;
+            height: 100%; 
+            border-top: 3px solid #D1D5DB; /* Light gray line */
+            border-left: 2px solid transparent; 
+            border-right: 2px solid transparent;
+            box-sizing: border-box; 
+            pointer-events: none; 
+        }
+        /* Custom image styling */
+        #gift-photo {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            object-fit: cover;
+            margin: 0 auto 1.5rem; /* Center and add margin below */
+            display: block;
+            border: 4px solid #f59e0b; /* Amber border to match 'present' color */
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-start p-4">
+
+    <!-- Main Application Container --><div class="w-full max-w-xl mx-auto bg-white shadow-2xl rounded-xl p-4 md:p-8 space-y-6">
+        <h1 id="app-title" class="text-3xl md:text-4xl font-extrabold text-center text-gray-800 tracking-tight border-b-2 pb-2 mb-4">
+            PTYPAOLO'S BDAY GFT
+        </h1>
+        
+        <!-- PERSONALIZED PHOTO SECTION --><img 
+            id="gift-photo"
+            class="rounded-xl shadow-lg"
+            src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExOXFneGFmOGRmdjQwZTMwNThzMnQ0ZXU1MDQyZ2V5c3Z4enR0d2Z3NiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/tPBWZyAqELZjbKCs0C/giphy.gif" 
+            alt="A personalized gift photo for the quiz recipient."
+            onerror="this.onerror=null; this.src='https://placehold.co/200x200/5eead4/0f766e?text=Photo+Missing'"
+        >
+
+        <div id="game-mode" class="space-y-6 flex flex-col items-center">
+            <!-- Game Grid Container --><div class="relative w-full max-w-md" style="aspect-ratio: 12 / 10;">
+                <!-- Word Segment Indicators - 4px separation implemented via CSS calc() in width and left position --><!-- KISS (4 letters) --><span class="word-segment-indicator" style="width: calc((100% / 12) * 4 - 4px); left: 0;"></span>
+                
+                <!-- THE (3 letters) --><span class="word-segment-indicator" style="width: calc((100% / 12) * 3 - 4px); left: calc((100% / 12) * 4 + 4px);"></span>
+                
+                <!-- REMIX (5 letters) --><span class="word-segment-indicator" style="width: calc((100% / 12) * 5); left: calc((100% / 12) * 7 + 4px);"></span>
+
+                <!-- Game Grid: 10 rows and 12 columns --><div id="game-board" class="grid gap-1.5" style="grid-template-rows: repeat(10, 1fr); grid-template-columns: repeat(12, 1fr); width: 100%; height: 100%;">
+                    <!-- Tiles will be generated by JS --></div>
+            </div>
+
+            <!-- Keyboard --><div id="keyboard" class="mt-6 w-full max-w-md">
+                <!-- Keys will be generated by JS --></div>
+        </div>
+    </div>
+
+    <!-- Modal Notification (Used for game messages and the final gift reveal) --><div id="notification-modal" class="fixed inset-0 bg-gray-900 bg-opacity-80 hidden items-center justify-center p-4 z-50 transition-opacity duration-300">
+        <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-sm text-center transform transition-transform duration-300 scale-95">
+            <h3 id="modal-title" class="text-2xl font-bold mb-3 text-gray-800"></h3>
+            <p id="modal-message" class="text-gray-600 mb-4"></p>
+            <button id="modal-close" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // --- HARDCODED GAME CONFIGURATION (No Database) ---
+        const SECRET_WORD = 'KISSTHEREMIX';
+        const WORD_LENGTH = SECRET_WORD.length; // 12
+        const MAX_GUESSES = 10;
+        // WINNING MESSAGE
+        const WINNING_MESSAGE = "CONDRAGULAZIONI! HAI VINTO CARLY RAE JAPSEN KISS THE REMIX ONLY JAPON! ˚⊱🪷⊰˚ WE LOVE YOU <3 da aleambro, pi, denise, ele, carol, edo e matteo.";
+        // LOSING MESSAGE
+        const LOSING_MESSAGE = "HAI SBAGLIATOOOOO go find yourself or whatever.....";
+
+        // --- Game State Variables ---
+        let currentGuess = '';
+        let currentRow = 0;
+        let gameActive = true;
+        let keyboardState = {}; // Stores feedback for each key
+
+        // --- DOM Elements ---
+        const gameBoardEl = document.getElementById('game-board');
+        const keyboardEl = document.getElementById('keyboard');
+        const modalEl = document.getElementById('notification-modal');
+        const modalTitleEl = document.getElementById('modal-title');
+        const modalMessageEl = document.getElementById('modal-message');
+        const modalCloseButton = document.getElementById('modal-close');
+
+        // --- Utility Functions ---
+
+        /** Shows a custom notification modal. */
+        function showNotification(title, message, isVictory = false) {
+            modalTitleEl.textContent = title;
+            modalMessageEl.textContent = message;
+            modalEl.classList.remove('hidden');
+            modalEl.classList.add('flex');
+
+            if (isVictory) {
+                modalCloseButton.textContent = "Claim Your Gift!";
+                modalCloseButton.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+                modalCloseButton.classList.add('bg-pink-600', 'hover:bg-pink-700');
+            } else {
+                modalCloseButton.textContent = "Got It!";
+                modalCloseButton.classList.remove('bg-pink-600', 'hover:bg-pink-700');
+                modalCloseButton.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+            }
+        }
+
+        modalCloseButton.addEventListener('click', () => {
+            modalEl.classList.add('hidden');
+            modalEl.classList.remove('flex');
+        });
+
+        // --- Core Game Logic ---
+
+        /** Generates the initial empty game board grid. */
+        function createBoard() {
+            gameBoardEl.innerHTML = '';
+            for (let r = 0; r < MAX_GUESSES; r++) {
+                for (let c = 0; c < WORD_LENGTH; c++) {
+                    const tile = document.createElement('div');
+                    tile.id = `tile-${r}-${c}`;
+                    tile.classList.add('tile', 'rounded-md');
+
+                    // Ensure no custom border styles remain from previous iterations
+                    tile.style.borderRightWidth = '';
+                    tile.style.borderRightColor = '';
+
+                    gameBoardEl.appendChild(tile);
+                }
+            }
+        }
+
+        /** Creates the virtual keyboard HTML structure and binds events. */
+        function createKeyboard() {
+            const layout = [
+                ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+                ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+                ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'BACKSPACE']
+            ];
+
+            keyboardEl.innerHTML = '';
+
+            layout.forEach(row => {
+                const rowEl = document.createElement('div');
+                rowEl.classList.add('flex', 'justify-center');
+
+                row.forEach(key => {
+                    const keyEl = document.createElement('button');
+                    keyEl.textContent = key === 'BACKSPACE' ? '⌫' : key;
+                    keyEl.id = `key-${key}`;
+                    keyEl.classList.add('key', 'shadow-sm');
+
+                    if (key === 'ENTER' || key === 'BACKSPACE') {
+                        keyEl.classList.add('px-3', 'text-sm');
+                    }
+
+                    keyEl.setAttribute('data-key', key);
+                    keyEl.addEventListener('click', () => handleKey(key));
+
+                    rowEl.appendChild(keyEl);
+                });
+                keyboardEl.appendChild(rowEl);
+            });
+        }
+
+        /** Handles all key inputs (physical and virtual). */
+        function handleKey(key) {
+            if (!gameActive) return;
+
+            if (key === 'ENTER') {
+                checkGuess();
+                return;
+            }
+
+            if (key === 'BACKSPACE' || key === 'DEL') {
+                deleteLetter();
+                return;
+            }
+
+            // Only allow letter keys
+            if (/^[A-Z]$/.test(key) && currentGuess.length < WORD_LENGTH) {
+                addLetter(key);
+            }
+        }
+
+        /** Adds a letter to the current guess. */
+        function addLetter(letter) {
+            if (currentGuess.length < WORD_LENGTH) {
+                currentGuess += letter;
+                updateBoard(true);
+            }
+        }
+
+        /** Deletes the last letter of the current guess. */
+        function deleteLetter() {
+            currentGuess = currentGuess.slice(0, -1);
+            updateBoard();
+        }
+
+        /** Updates the visual representation of the current guess on the board. */
+        function updateBoard(animate = false) {
+            for (let c = 0; c < WORD_LENGTH; c++) {
+                const tile = document.getElementById(`tile-${currentRow}-${c}`);
+                if (tile) {
+                    const letter = currentGuess[c] || '';
+                    tile.textContent = letter;
+
+                    // Update styling based on input state
+                    if (letter) {
+                        tile.classList.remove('empty', 'absent', 'present', 'correct');
+                        tile.classList.add('default');
+                    } else {
+                        // Clear class if letter is deleted and set back to empty style
+                        tile.classList.remove('default', 'absent', 'present', 'correct');
+                        // Ensure tile returns to original black/white/transparent style
+                    }
+
+                    if (animate && letter) {
+                        // Pop animation for typing feel
+                        tile.style.animation = 'none';
+                        void tile.offsetWidth;
+                        tile.style.animation = 'pop 0.1s ease-out';
+                    }
+                }
+            }
+        }
+
+        /** Checks the current guess against the secret word and provides feedback. */
+        function checkGuess() {
+            if (currentGuess.length !== WORD_LENGTH) {
+                showNotification("Incomplete Guess", `Your guess must be exactly ${WORD_LENGTH} letters long.`);
+                return;
+            }
+
+            const guess = currentGuess;
+            const target = SECRET_WORD;
+            const feedback = Array(WORD_LENGTH).fill('absent');
+            const targetLetters = Array.from(target);
+            const guessLetters = Array.from(guess);
+
+            // 1. Check for CORRECT (Green) placements
+            for (let i = 0; i < WORD_LENGTH; i++) {
+                if (guessLetters[i] === targetLetters[i]) {
+                    feedback[i] = 'correct';
+                    targetLetters[i] = null; // Consume the letter
+                }
+            }
+
+            // 2. Check for PRESENT (Yellow) placements
+            for (let i = 0; i < WORD_LENGTH; i++) {
+                if (feedback[i] === 'absent') {
+                    const targetIndex = targetLetters.indexOf(guessLetters[i]);
+                    if (targetIndex > -1) {
+                        feedback[i] = 'present';
+                        targetLetters[targetIndex] = null; // Consume the letter
+                    }
+                }
+            }
+
+            // Apply feedback to tiles
+            let isWin = true;
+            for (let i = 0; i < WORD_LENGTH; i++) {
+                const tile = document.getElementById(`tile-${currentRow}-${i}`);
+                if (tile) {
+                    // Staggered flip animation for all letters in the row
+                    setTimeout(() => {
+                        tile.classList.remove('default');
+                        tile.classList.add(feedback[i]);
+                    }, i * 120);
+                }
+
+                // Update keyboard state (only improve state: absent -> present -> correct)
+                const letter = guessLetters[i];
+                const currentStatus = keyboardState[letter];
+                const newStatus = feedback[i];
+
+                if (currentStatus !== 'correct' && (currentStatus !== 'present' || newStatus === 'correct')) {
+                    keyboardState[letter] = newStatus;
+                }
+
+                if (feedback[i] !== 'correct') {
+                    isWin = false;
+                }
+            }
+
+            // Wait for the tile flip animation to finish before updating keyboard and checking for end
+            setTimeout(() => {
+                updateKeyboardVisuals();
+
+                // Game End Conditions
+                if (isWin) {
+                    gameActive = false;
+                    showNotification("🎉 CONGRATULATIONS! 🎉", WINNING_MESSAGE, true);
+                } else if (currentRow === MAX_GUESSES - 1) {
+                    gameActive = false;
+                    showNotification("Game Over", `${LOSING_MESSAGE}. The word was: ${target}.`);
+                } else {
+                    // Move to next row
+                    currentGuess = '';
+                    currentRow++;
+                }
+            }, WORD_LENGTH * 120 + 300);
+        }
+
+        /** Applies stored state to virtual keyboard keys. */
+        function updateKeyboardVisuals() {
+            for (const letter in keyboardState) {
+                const keyEl = document.getElementById(`key-${letter}`);
+                if (keyEl) {
+                    keyEl.setAttribute('data-state', keyboardState[letter]);
+                }
+            }
+        }
+
+        // --- Initialization ---
+
+        window.onload = () => {
+            createBoard();
+            createKeyboard();
+
+            // Setup Event Listeners for physical keyboard
+            document.addEventListener('keyup', (e) => {
+                // Ensure keypresses are only registered if the modal is closed
+                if (!gameActive || !modalEl.classList.contains('hidden')) return;
+
+                const key = e.key.toUpperCase();
+                if (key === 'BACKSPACE' || e.key === 'Delete') {
+                    handleKey('BACKSPACE');
+                } else if (key === 'ENTER') {
+                    handleKey('ENTER');
+                } else if (key.length === 1 && key.charCodeAt(0) >= 65 && key.charCodeAt(0) <= 90) {
+                    handleKey(key);
+                }
+            });
+        };
+    </script>
+</body>
+</html>
